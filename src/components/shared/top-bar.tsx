@@ -13,7 +13,7 @@ export const TopBar = (props: Props) => {
   return (
     <div
       className={cn(
-        "sticky bg-white py-5 shadow-lg z-10 shadow-black/5",
+        "sticky top-0 bg-white py-5 shadow-lg shadow-black/5 z-10",
         className
       )}
     >
