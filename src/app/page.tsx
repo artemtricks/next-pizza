@@ -29,42 +29,42 @@ export default function Home() {
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 2,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 3,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 4,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 5,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 6,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 7,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
@@ -84,42 +84,42 @@ export default function Home() {
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 2,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 3,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 4,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 5,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 6,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
                   },
                   {
                     name: "Чизбургер пицца",
-                    id: 1,
+                    id: 7,
                     imageUrl:
                       "https://media.dodostatic.net/image/r:584x584/11EE7D61389AB51A8F648A0DBA5B1689.avif",
                     price: 550,
