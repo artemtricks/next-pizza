@@ -3,8 +3,11 @@ import { Search } from "lucide-react";
 import React from "react";
 import { Input } from "../ui";
 import { cn } from "@/lib/utils";
-import { useClickAway } from "react-use";
+import { useClickAway, useDebounce } from "react-use";
 import Link from "next/link";
+import { Api } from "@/services/api-client";
+import { Product } from "@prisma/client";
+import { Prosto_One } from "next/font/google";
 
 type Props = {
   className?: string;
@@ -13,10 +16,32 @@ type Props = {
 export const SearchInput = (props: Props) => {
   const { className } = props;
   const [focused, setFocused] = React.useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [products, setProducts] = React.useState<Product[] | []>([]);
+
+  useDebounce(
+    async () => {
+      try {
+        const response = await Api.products.search(searchQuery);
+        setProducts(response);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    500,
+    [searchQuery]
+  );
+
   const ref = React.useRef(null);
   useClickAway(ref, () => {
     setFocused(false);
   });
+
+  const onClickItem = () => {
+    setFocused(false);
+    setSearchQuery("");
+    setProducts([]);
+  };
   return (
     <>
       {focused && (
@@ -35,26 +60,34 @@ export const SearchInput = (props: Props) => {
           type="text"
           placeholder="Найти пиццу..."
           onFocus={() => setFocused(true)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <div
-          className={cn(
-            "absolute w-full rounded-xl py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30 bg-white",
-            focused && "opacity-100 visible top-12"
-          )}
-        >
-          <Link
-            href="product/1"
-            className="flex items-center gap-3 w-full py-2 px-3 cursor-pointer hover:bg-primary/10"
+        {products.length > 0 && (
+          <div
+            className={cn(
+              "absolute w-full rounded-xl py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30 bg-white",
+              focused && "opacity-100 visible top-12"
+            )}
           >
-            <img
-              src="https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp"
-              alt="pizza-1"
-              className="h-8 w-8 rounded-sm"
-            />
+            {products.map((item) => (
+              <Link
+                onClick={onClickItem}
+                key={item.id}
+                href={`/product/${item.id}`}
+                className="flex items-center gap-3 w-full py-2 px-3 cursor-pointer hover:bg-primary/10"
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.name}
+                  className="h-8 w-8 rounded-sm"
+                />
 
-            <span className="">pizza 1</span>
-          </Link>
-        </div>
+                <span className="">{item.name}</span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
