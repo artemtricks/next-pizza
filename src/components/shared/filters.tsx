@@ -1,47 +1,76 @@
 "use client";
-
 import React from "react";
-import { FilterCheckbox, Title } from "./index";
+import { Title } from "./index";
 import { Input } from "../ui";
 import { RangeSlider } from "./range-slider";
 import { CheckboxFiltersGroup } from "./checkbox-filter-group";
-import { useFilterIngredients } from "../hooks/useFilterIngredients";
-import { Ingredient } from "@prisma/client";
+import { useFilters, useQueryFilter, useIngredients } from "../hooks";
 
 type Props = {
   className?: string;
 };
 
-type PriceProps = {
-  priceFrom: number;
-  priceTo: number;
+export type PriceProps = {
+  priceFrom?: number;
+  priceTo?: number;
 };
+
+export type QueryFilters = {
+  pizzaTypes: string;
+  ingredients: string;
+  sizes: string;
+} & PriceProps;
 
 export const Filters = (props: Props) => {
   const { className } = props;
-  const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients();
-  const [price, setPrice] = React.useState<PriceProps>({
-    priceFrom: 0,
-    priceTo: 1000,
-  });
+  const { ingredients, loading } = useIngredients();
+  const {
+    price,
+    setPrice,
+    updatePrice,
+    pizzaTypes,
+    togglePizzaTypes,
+    selectedIngredients,
+    toggleIngredients,
+    sizes,
+    toggleSize,
+  } = useFilters();
+
+  useQueryFilter({ price, pizzaTypes, sizes, selectedIngredients });
 
   const ingredientsAll = ingredients.map((item) => ({
     text: item.name,
     value: String(item.id),
   }));
 
-  const updatePrice = (name: keyof PriceProps, value: number) => {
-    setPrice({ ...price, [name]: value });
-  };
-
   return (
     <div>
       <div className={className}>
         <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
-        <div className="flex flex-col gap-4">
-          <FilterCheckbox text="Можно Собирать" value="1" />
-          <FilterCheckbox text="Новинки" value="2" />
-        </div>
+        <CheckboxFiltersGroup
+          title="Тип теста"
+          name="pizzaTypes"
+          className="mb-5"
+          onClickCheckbox={togglePizzaTypes}
+          selected={pizzaTypes}
+          items={[
+            { text: "Тонкое", value: "1" },
+            { text: "Традиционное", value: "2" },
+          ]}
+        />
+
+        <CheckboxFiltersGroup
+          title="Размеры"
+          name="sizes"
+          className="mb-5"
+          onClickCheckbox={toggleSize}
+          selected={sizes}
+          items={[
+            { text: "20 см", value: "20" },
+            { text: "30 см", value: "30" },
+            { text: "40 см", value: "40" },
+          ]}
+        />
 
         <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
           <p className="font-bold mp-3">Цена от и до:</p>
@@ -67,7 +96,7 @@ export const Filters = (props: Props) => {
             min={0}
             max={1000}
             step={10}
-            value={[price.priceFrom, price.priceTo]}
+            value={[price.priceFrom || 0, price.priceTo || 1000]}
             onValueChange={([priceFrom, priceTo]) =>
               setPrice({ priceFrom, priceTo })
             }
@@ -81,8 +110,8 @@ export const Filters = (props: Props) => {
           defaultItems={ingredientsAll.slice(0, 6)}
           items={ingredientsAll}
           loading={loading}
-          onClickCheckbox={onAddId}
-          selected={selectedIds}
+          onClickCheckbox={toggleIngredients}
+          selected={selectedIngredients}
         />
       </div>
     </div>
