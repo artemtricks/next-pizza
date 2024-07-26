@@ -1,9 +1,9 @@
-import { Container, Title } from "@/components/shared";
+import { Container, Title } from "@/shared/components/shared";
 import React from "react";
 import { prisma } from "../../../../../prisma/prisma-client";
 import { notFound } from "next/navigation";
-import { PizzaImage } from "@/components/shared/pizza-image";
-import { GroupVariants } from "@/components/shared/group-variants";
+import { PizzaImage } from "@/shared/components/shared/pizza-image";
+import { GroupVariants } from "@/shared/components/shared/group-variants";
 
 export default async function ProductPage({
   params: { id },

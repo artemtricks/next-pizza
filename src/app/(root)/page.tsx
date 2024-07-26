@@ -1,6 +1,6 @@
-import { Title, Container, TopBar, Filters } from "@/components/shared";
-import { ProductCard } from "@/components/shared/product-card";
-import { ProductCardList } from "@/components/shared/product-card-list";
+import { Title, Container, TopBar, Filters } from "@/shared/components/shared";
+import { ProductCard } from "@/shared/components/shared/product-card";
+import { ProductCardList } from "@/shared/components/shared/product-card-list";
 import { prisma } from "../../../prisma/prisma-client";
 
 export default async function Home() {
