@@ -32,6 +32,7 @@ export const ChooseProductModal = (props: Props) => {
             name={product.name}
             imageUrl={product.imageUrl}
             ingredients={product.ingredients}
+            items={product.items}
           />
         ) : (
           <ChooseProductForm name={product.name} imageUrl={product.imageUrl} />

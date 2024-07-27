@@ -13,4 +13,5 @@ export { RangeSlider } from "./range-slider";
 export { ProductCard } from "./product-card";
 export { ProductCardList } from "./product-card-list";
 export { CheckboxFiltersGroup } from "./checkbox-filter-group";
+export { IngredientItem } from "./ingredient-item";
 export * from "./modals";
