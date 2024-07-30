@@ -15,6 +15,10 @@ import { Button } from "../ui";
 import Link from "next/link";
 import { CartDrawerItem } from "./cart-drawer-item";
 import { getCartItemDetails } from "@/shared/lib";
+import { useCartStore } from "@/shared/store/cart";
+import { calcCartTotalPrice } from "@/shared/lib/calc-cart-total-price";
+import { PizzaVariantType } from "./choose-pizza-form";
+import { Ingredient } from "@prisma/client";
 
 type Props = {
   className?: string;
@@ -25,6 +29,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
   props: Props
 ) => {
   const { children } = props;
+
+  const { fetchCartItems, loading, items } = useCartStore((state) => state);
+
+  React.useEffect(() => {
+    fetchCartItems();
+  }, []);
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -37,18 +47,23 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
 
         <div className="-mx-6 mt-5 overflow-auto scrollbar flex-1">
           <div className="mb-2">
-            <CartDrawerItem
-              id={0}
-              imageUrl={
-                "https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp"
-              }
-              details={getCartItemDetails({ size: 30, type: 1 }, [
-                { name: "Цыпленок" },
-              ])}
-              name={"Сырная"}
-              price={350}
-              quantity={1}
-            />
+            {items.map((item) => (
+              <CartDrawerItem
+                key={item.id}
+                id={item.id}
+                imageUrl={item.imageUrl}
+                details={getCartItemDetails(
+                  {
+                    size: item.pizzaSize,
+                    type: item.pizzaType,
+                  } as PizzaVariantType,
+                  item.ingredients as Ingredient[]
+                )}
+                name={item.name}
+                price={item.price}
+                quantity={item.quantyty}
+              />
+            ))}
           </div>
         </div>
         <SheetFooter className="-mx-6 bg-white p-8">
