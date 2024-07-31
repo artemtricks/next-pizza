@@ -30,8 +30,29 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
 ) => {
   const { children } = props;
 
-  const { fetchCartItems, loading, items } = useCartStore((state) => state);
+  const {
+    fetchCartItems,
+    loading,
+    items,
+    updateItemQuantity,
+    totalAmount,
+    removeCartItem,
+  } = useCartStore((state) => state);
+  const total = items.find((item) => item)?.quantyty;
 
+  const onClickCountButton = (
+    type: "plus" | "minus",
+    id: number,
+    quantity: number
+  ) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
+    console.log({ newQuantity, id });
+    updateItemQuantity(newQuantity, id);
+  };
+
+  const onClickRemove = (id: number) => {
+    removeCartItem(id);
+  };
   React.useEffect(() => {
     fetchCartItems();
   }, []);
@@ -41,7 +62,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#f4f1ee]">
         <SheetHeader>
           <SheetTitle>
-            В корзине <span className="font-bold"> 3 товара</span>
+            В корзине <span className="font-bold">{total} товара</span>
           </SheetTitle>
         </SheetHeader>
 
@@ -62,6 +83,10 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
                 name={item.name}
                 price={item.price}
                 quantity={item.quantyty}
+                onClickCountButton={(type) =>
+                  onClickCountButton(type, item.id, item.quantyty)
+                }
+                onClickRemove={onClickRemove}
               />
             ))}
           </div>
@@ -74,7 +99,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
                 <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
               </span>
 
-              <span className="font-bold text-lg">500 ₽</span>
+              <span className="font-bold text-lg">{totalAmount} ₽</span>
             </div>
 
             <Link href="/checkout">
