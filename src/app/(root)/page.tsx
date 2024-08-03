@@ -1,5 +1,4 @@
 import { Title, Container, TopBar, Filters } from "@/shared/components/shared";
-import { ProductCard } from "@/shared/components/shared/product-card";
 import { ProductCardList } from "@/shared/components/shared/product-card-list";
 import { prisma } from "../../../prisma/prisma-client";
 

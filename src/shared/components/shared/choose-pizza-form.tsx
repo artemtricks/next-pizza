@@ -23,7 +23,7 @@ type Props = {
   imageUrl: string;
   ingredients: Ingredient[];
   items: ProductWithRelation["items"];
-  onClickAddCart?: VoidFunction;
+  onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
 };
 
@@ -33,8 +33,7 @@ export type PizzaVariantType = {
 };
 
 export const ChoosePizzaForm = (props: Props) => {
-  const { name, imageUrl, ingredients, items, onClickAddCart, className } =
-    props;
+  const { name, imageUrl, ingredients, items, onSubmit, className } = props;
 
   const {
     pizzaVariant,
@@ -42,6 +41,7 @@ export const ChoosePizzaForm = (props: Props) => {
     avilablePizzaSizes,
     selectedIngredients,
     addIngredient,
+    currentItemId,
   } = usePizzaOptions(items);
 
   const { totalPrice } = calcTotalPrice(
@@ -54,6 +54,12 @@ export const ChoosePizzaForm = (props: Props) => {
   const detailText = `${pizzaVariant.size} см, ${
     mapPizzaType[pizzaVariant.type]
   } тесто`;
+
+  const handlePizzaCart = () => {
+    if (currentItemId) {
+      onSubmit(currentItemId, Array.from(selectedIngredients));
+    }
+  };
 
   return (
     <div className={cn("flex flex-1", className)}>
@@ -97,7 +103,10 @@ export const ChoosePizzaForm = (props: Props) => {
             ))}
           </div>
         </div>
-        <Button className="h-[55px] w-full px-10 rounded-[18px] text-base mt-10">
+        <Button
+          onClick={handlePizzaCart}
+          className="h-[55px] w-full px-10 rounded-[18px] text-base mt-10"
+        >
           Add to cart for {totalPrice} p
         </Button>
       </div>

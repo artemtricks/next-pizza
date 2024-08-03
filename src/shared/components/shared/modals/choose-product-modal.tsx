@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { ChooseProductForm } from "../choose-product-form";
 import { ProductWithRelation } from "@/@types/prisma";
 import { ChoosePizzaForm } from "../choose-pizza-form";
+import { useCartStore } from "@/shared/store/cart";
+import { CrateCartItemValues } from "@/shared/services/dto/cart.dto";
 
 type Props = {
   className?: string;
@@ -18,7 +20,19 @@ type Props = {
 export const ChooseProductModal = (props: Props) => {
   const { className, product } = props;
   const router = useRouter();
-  const isPizzaForm = Boolean(product.items[0].pizzaType);
+  const firstItem = product.items[0];
+  const isPizzaForm = Boolean(firstItem.pizzaType);
+  const { addCartItem } = useCartStore((state) => state);
+
+  const handleAddProduct = () => {
+    addCartItem({ productItemId: firstItem.id });
+  };
+
+  const handleAddPizza = (itemId: number, ingredients: number[]) => {
+    addCartItem({ productItemId: itemId, ingredients });
+  };
+
+  console.log(product, "product");
   return (
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
       <DialogContent
@@ -33,9 +47,14 @@ export const ChooseProductModal = (props: Props) => {
             imageUrl={product.imageUrl}
             ingredients={product.ingredients}
             items={product.items}
+            onSubmit={handleAddPizza}
           />
         ) : (
-          <ChooseProductForm name={product.name} imageUrl={product.imageUrl} />
+          <ChooseProductForm
+            name={product.name}
+            imageUrl={product.imageUrl}
+            onSubmit={handleAddProduct}
+          />
         )}
       </DialogContent>
     </Dialog>

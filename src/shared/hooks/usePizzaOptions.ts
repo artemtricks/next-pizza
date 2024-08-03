@@ -12,6 +12,7 @@ type ReturnProps = {
   avilablePizzaSizes: Variant[];
   addIngredient: (key: number) => void;
   selectedIngredients: Set<number>;
+  currentItemId: number | undefined;
 };
 
 export const usePizzaOptions = (
@@ -26,6 +27,11 @@ export const usePizzaOptions = (
   const [selectedIngredients, { toggle: addIngredient }] = useSet(
     new Set<number>([])
   );
+
+  const currentItemId = items.find(
+    (item) =>
+      item.pizzaType === pizzaVariant.type && item.size === pizzaVariant.size
+  )?.id;
 
   React.useEffect(() => {
     const isAvailabelSize = avilablePizzaSizes.find(
@@ -49,5 +55,6 @@ export const usePizzaOptions = (
     avilablePizzaSizes,
     selectedIngredients,
     addIngredient,
+    currentItemId,
   };
 };

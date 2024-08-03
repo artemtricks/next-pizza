@@ -7,12 +7,12 @@ import { Button } from "../ui";
 type Props = {
   name: string;
   imageUrl: string;
-  onClickAdd?: VoidFunction;
+  onSubmit: VoidFunction;
   className?: string;
 };
 
 export const ChooseProductForm = (props: Props) => {
-  const { name, imageUrl, onClickAdd, className } = props;
+  const { name, imageUrl, onSubmit, className } = props;
   const detailText = "30sm traditionaly testo 30";
   const totalPrice = 350;
   return (
@@ -27,7 +27,10 @@ export const ChooseProductForm = (props: Props) => {
       <div className="w-[490px] p-7 bg-[#f7f6f5]">
         <Title size="md" text={name} className="font-extralight mb-1" />
         <p className="text-gray-400">{detailText}</p>
-        <Button className="h-[55px] w-full px-10 rounded-[18px] text-base mt-10">
+        <Button
+          onClick={onSubmit}
+          className="h-[55px] w-full px-10 rounded-[18px] text-base mt-10"
+        >
           Add to cart for {totalPrice} p
         </Button>
       </div>

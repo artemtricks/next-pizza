@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { CartStateItem, getCartDetails } from "../lib/get-cart-details";
 import { Api } from "../services/api-client";
+import { CrateCartItemValues } from "../services/dto/cart.dto";
 
 export interface CartState {
   loading: boolean;
@@ -11,7 +12,7 @@ export interface CartState {
   items: CartStateItem[];
   fetchCartItems: () => Promise<void>;
   updateItemQuantity: (quantity: number, id: number) => Promise<void>;
-  //   addCartItem: (value: any) => Promise<void>;
+  addCartItem: (value: CrateCartItemValues) => Promise<void>;
   removeCartItem: (id: number) => Promise<void>;
 }
 
@@ -47,12 +48,26 @@ export const useCartStore = create<CartState>((set, get) => ({
       set({ loading: false });
     }
   },
-  //   addCartItem: (value: any) => {},
+
   removeCartItem: async (id: number) => {
     try {
       set({ loading: true, error: false });
       const data = await Api.cart.removeCartItem(id);
-      console.log(data, "data");
+
+      set(getCartDetails(data));
+    } catch (error) {
+      console.error(error);
+      set({ error: true });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  addCartItem: async (value: CrateCartItemValues) => {
+    try {
+      set({ loading: true, error: false });
+      const data = await Api.cart.addCartItem(value);
+
       set(getCartDetails(data));
     } catch (error) {
       console.error(error);
