@@ -4,7 +4,6 @@ import React, { ReactNode } from "react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -16,7 +15,6 @@ import Link from "next/link";
 import { CartDrawerItem } from "./cart-drawer-item";
 import { getCartItemDetails } from "@/shared/lib";
 import { useCartStore } from "@/shared/store/cart";
-import { calcCartTotalPrice } from "@/shared/lib/calc-cart-total-price";
 import { PizzaVariantType } from "./choose-pizza-form";
 import { Ingredient } from "@prisma/client";
 
@@ -56,6 +54,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
   React.useEffect(() => {
     fetchCartItems();
   }, []);
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -67,10 +66,9 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
         </SheetHeader>
 
         <div className="-mx-6 mt-5 overflow-auto scrollbar flex-1">
-          <div className="mb-2">
-            {items.map((item) => (
+          {items.map((item) => (
+            <div className="mb-2" key={item.id}>
               <CartDrawerItem
-                key={item.id}
                 id={item.id}
                 imageUrl={item.imageUrl}
                 details={getCartItemDetails(
@@ -88,8 +86,8 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = (
                 }
                 onClickRemove={onClickRemove}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
         <SheetFooter className="-mx-6 bg-white p-8">
           <div className="w-full">

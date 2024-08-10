@@ -7,14 +7,15 @@ import { Button } from "../ui";
 type Props = {
   name: string;
   imageUrl: string;
-  onSubmit: VoidFunction;
+  onSubmit: () => void;
   className?: string;
+  price: number;
+  loading?: boolean;
 };
 
 export const ChooseProductForm = (props: Props) => {
-  const { name, imageUrl, onSubmit, className } = props;
-  const detailText = "30sm traditionaly testo 30";
-  const totalPrice = 350;
+  const { name, imageUrl, onSubmit, className, price, loading } = props;
+
   return (
     <div className={cn("flex flex-1", className)}>
       <div className="flex items-center justify-center flex-1 relative w-full">
@@ -26,12 +27,13 @@ export const ChooseProductForm = (props: Props) => {
       </div>
       <div className="w-[490px] p-7 bg-[#f7f6f5]">
         <Title size="md" text={name} className="font-extralight mb-1" />
-        <p className="text-gray-400">{detailText}</p>
+
         <Button
+          loading={loading}
           onClick={onSubmit}
           className="h-[55px] w-full px-10 rounded-[18px] text-base mt-10"
         >
-          Add to cart for {totalPrice} p
+          Add to cart for {price} p
         </Button>
       </div>
     </div>

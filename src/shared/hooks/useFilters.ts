@@ -1,6 +1,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSet } from "react-use";
-import { PriceProps, QueryFilters } from "../shared/filters";
+import { PriceProps, QueryFilters } from "../components/shared/filters";
 import React from "react";
 
 export const useFilters = () => {

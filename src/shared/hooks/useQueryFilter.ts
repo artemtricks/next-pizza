@@ -1,5 +1,5 @@
 import React from "react";
-import { PriceProps } from "../shared/filters";
+import { PriceProps } from "@/shared/components/shared/filters";
 import qs from "qs";
 import { useRouter } from "next/navigation";
 

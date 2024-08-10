@@ -25,6 +25,7 @@ type Props = {
   items: ProductWithRelation["items"];
   onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
+  loading?: boolean;
 };
 
 export type PizzaVariantType = {
@@ -33,7 +34,8 @@ export type PizzaVariantType = {
 };
 
 export const ChoosePizzaForm = (props: Props) => {
-  const { name, imageUrl, ingredients, items, onSubmit, className } = props;
+  const { name, imageUrl, ingredients, items, onSubmit, className, loading } =
+    props;
 
   const {
     pizzaVariant,
@@ -104,6 +106,7 @@ export const ChoosePizzaForm = (props: Props) => {
           </div>
         </div>
         <Button
+          loading={loading}
           onClick={handlePizzaCart}
           className="h-[55px] w-full px-10 rounded-[18px] text-base mt-10"
         >
