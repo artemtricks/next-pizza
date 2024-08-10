@@ -6,11 +6,12 @@ import { cn } from "@/shared/lib/utils";
 import { ProductCard } from "./product-card";
 import { useIntersection } from "react-use";
 import { useCategoryStore } from "@/shared/store/category";
+import { ProductWithRelation } from "@/@types/prisma";
 
 type Props = {
   className?: string;
   title: string;
-  items: any[];
+  items: ProductWithRelation[];
   categoryId: number;
   listClassName?: string;
 };
@@ -38,6 +39,7 @@ export const ProductCardList = (props: Props) => {
             key={item.id}
             imageUrl={item.imageUrl}
             price={550}
+            ingredients={item.ingredients}
           />
         ))}
       </div>
