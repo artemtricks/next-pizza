@@ -1,44 +1,123 @@
 import { PriceProps } from "@/shared/components/shared/filters";
 import { create } from "zustand";
 
-type QueryFilters = {
+export type QueryFilters = {
   pizzaTypes: string[] | [];
   ingredients: string[] | [];
   sizes: string[] | [];
-  priceFrom?: number;
-  priceTo?: number;
+  price: PriceProps;
 };
 
 type State = {
-  activeFilters: QueryFilters;
-  setActiveFilters: (activeFilters: QueryFilters) => void;
-  deleteActiveFilter: (params: keyof QueryFilters) => void;
-  //   deleteAllFilters: () => void;
+  filterParams: QueryFilters;
+  updatePrice: (name: keyof PriceProps, value: number) => void;
+  setFiltersParams: (
+    value: string | PriceProps,
+    name: keyof QueryFilters
+  ) => void;
+
+  deleteActiveFilter: (name: keyof QueryFilters) => void;
+  deleteAllFilters: () => void;
 };
 
 export const useFilterStore = create<State>()((set, get) => ({
-  activeFilters: {
-    pizzaTypes: [],
-    ingredients: [],
+  filterParams: {
+    price: {
+      priceFrom: undefined,
+      priceTo: undefined,
+    },
     sizes: [],
-    priceFrom: undefined,
-    priceTo: undefined,
+    ingredients: [],
+    pizzaTypes: [],
   },
-  setActiveFilters: (activeFilters: QueryFilters) => set({ activeFilters }),
-  deleteActiveFilter: (params: keyof QueryFilters) => {
-    const updateFilters = { ...get().activeFilters };
-    if (params in updateFilters) {
-      const valuesFilters = get().activeFilters[params];
 
-      if (Array.isArray(valuesFilters)) {
-        //@ts-ignore
-        updateFilters[params] = [];
-      } else {
-        //@ts-ignore
-        updateFilters[params] = undefined;
-      }
+  // setPizzaTypes: (id: string) => {
+  //   const currentPizzaTypes = get().pizzaTypes;
 
-      set({ activeFilters: updateFilters });
+  //   !currentPizzaTypes.includes(id as never)
+  //     ? set({ pizzaTypes: [...currentPizzaTypes, id] })
+  //     : set({
+  //         pizzaTypes: [...currentPizzaTypes.filter((item) => item !== id)],
+  //       });
+  // }, // можно сделать так для каждого фильтра
+
+  setFiltersParams: (value: string | PriceProps, name: keyof QueryFilters) => {
+    const updateFilterValues = get().filterParams;
+    const currFilterValue = get().filterParams[name];
+
+    if (name === "price" && typeof value === "object") {
+      set({ filterParams: { ...updateFilterValues, price: value } });
     }
+
+    if (
+      typeof value === "string" &&
+      Array.isArray(currFilterValue) &&
+      !currFilterValue.includes(value as never)
+    ) {
+      set({
+        filterParams: {
+          ...updateFilterValues,
+          [name]: [...currFilterValue, value],
+        },
+      });
+    }
+
+    if (
+      typeof value === "string" &&
+      Array.isArray(currFilterValue) &&
+      currFilterValue.includes(value as never)
+    ) {
+      set({
+        filterParams: {
+          ...updateFilterValues,
+          [name]: [...currFilterValue.filter((item) => item !== value)],
+        },
+      });
+    }
+  },
+
+  updatePrice: (name: keyof PriceProps, value: number) => {
+    const currentFilterValue = get().filterParams;
+    set({
+      filterParams: {
+        ...currentFilterValue,
+        price: { ...currentFilterValue["price"], [name]: value },
+      },
+    });
+  },
+
+  deleteActiveFilter: (name: keyof QueryFilters) => {
+    const updateFilterValues = get().filterParams;
+    const currFilterValue = get().filterParams[name];
+
+    if (Array.isArray(currFilterValue)) {
+      set({
+        filterParams: {
+          ...updateFilterValues,
+          [name]: [],
+        },
+      });
+    } else {
+      set({
+        filterParams: {
+          ...updateFilterValues,
+          ["price"]: { priceTo: undefined, priceFrom: undefined },
+        },
+      });
+    }
+  },
+
+  deleteAllFilters: () => {
+    set({
+      filterParams: {
+        price: {
+          priceFrom: undefined,
+          priceTo: undefined,
+        },
+        sizes: [],
+        ingredients: [],
+        pizzaTypes: [],
+      },
+    });
   },
 }));
