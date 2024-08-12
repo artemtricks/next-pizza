@@ -4,7 +4,8 @@ import { Title } from "./index";
 import { Input } from "../ui";
 import { RangeSlider } from "./range-slider";
 import { CheckboxFiltersGroup } from "./checkbox-filter-group";
-import { useFilters, useQueryFilter, useIngredients } from "@/shared/hooks";
+import { useQueryFilter, useIngredients } from "@/shared/hooks";
+import { useFilterStore } from "@/shared/store/filters";
 
 type Props = {
   className?: string;
@@ -24,19 +25,12 @@ export type QueryFilters = {
 export const Filters = (props: Props) => {
   const { className } = props;
   const { ingredients, loading } = useIngredients();
-  const {
-    price,
-    setPrice,
-    updatePrice,
-    pizzaTypes,
-    togglePizzaTypes,
-    selectedIngredients,
-    toggleIngredients,
-    sizes,
-    toggleSize,
-  } = useFilters();
 
-  useQueryFilter({ price, pizzaTypes, sizes, selectedIngredients });
+  const { updatePrice, filterParams, setFiltersParams } = useFilterStore(
+    (state) => state
+  );
+
+  useQueryFilter(filterParams);
 
   const ingredientsAll = ingredients.map((item) => ({
     text: item.name,
@@ -51,8 +45,10 @@ export const Filters = (props: Props) => {
           title="Тип теста"
           name="pizzaTypes"
           className="mb-5"
-          onClickCheckbox={togglePizzaTypes}
-          selected={pizzaTypes}
+          onClickCheckbox={(value) => {
+            setFiltersParams(value, "pizzaTypes");
+          }}
+          selected={filterParams.pizzaTypes}
           items={[
             { text: "Тонкое", value: "1" },
             { text: "Традиционное", value: "2" },
@@ -63,8 +59,8 @@ export const Filters = (props: Props) => {
           title="Размеры"
           name="sizes"
           className="mb-5"
-          onClickCheckbox={toggleSize}
-          selected={sizes}
+          onClickCheckbox={(value) => setFiltersParams(value, "sizes")}
+          selected={filterParams.sizes}
           items={[
             { text: "20 см", value: "20" },
             { text: "30 см", value: "30" },
@@ -80,7 +76,7 @@ export const Filters = (props: Props) => {
               placeholder="0"
               min={0}
               max={1000}
-              value={String(price.priceFrom)}
+              value={String(filterParams.price.priceFrom)}
               onChange={(e) => updatePrice("priceFrom", Number(e.target.value))}
             />
             <Input
@@ -88,17 +84,23 @@ export const Filters = (props: Props) => {
               placeholder="1000"
               min={100}
               max={1000}
-              value={String(price.priceTo)}
-              onChange={(e) => updatePrice("priceFrom", Number(e.target.value))}
+              value={String(filterParams.price.priceTo)}
+              onChange={(e) => updatePrice("priceTo", Number(e.target.value))}
             />
           </div>
           <RangeSlider
             min={0}
             max={1000}
             step={10}
-            value={[price.priceFrom || 0, price.priceTo || 1000]}
+            value={[
+              filterParams.price.priceFrom || 0,
+              filterParams.price.priceTo || 1000,
+            ]}
             onValueChange={([priceFrom, priceTo]) =>
-              setPrice({ priceFrom, priceTo })
+              setFiltersParams(
+                { priceFrom: priceFrom, priceTo: priceTo },
+                "price"
+              )
             }
           />
         </div>
@@ -110,8 +112,8 @@ export const Filters = (props: Props) => {
           defaultItems={ingredientsAll.slice(0, 6)}
           items={ingredientsAll}
           loading={loading}
-          onClickCheckbox={toggleIngredients}
-          selected={selectedIngredients}
+          onClickCheckbox={(value) => setFiltersParams(value, "ingredients")}
+          selected={filterParams.ingredients}
         />
       </div>
     </div>

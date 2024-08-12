@@ -4,6 +4,7 @@ import { Catigories } from "./catigories";
 import { SortPopup } from "./sort-popup";
 import { cn } from "@/shared/lib/utils";
 import { Category } from "@prisma/client";
+import { FilterToolbar } from "./filter-toolbar";
 
 type Props = {
   className?: string;
@@ -12,6 +13,7 @@ type Props = {
 
 export const TopBar = (props: Props) => {
   const { className, categories } = props;
+
   return (
     <div
       className={cn(
@@ -19,10 +21,11 @@ export const TopBar = (props: Props) => {
         className
       )}
     >
-      <Container className="flex items-center justify-between">
+      <Container className="flex items-center justify-between mb-3">
         <Catigories items={categories} />
         <SortPopup />
       </Container>
+      <FilterToolbar />
     </div>
   );
 };

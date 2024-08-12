@@ -39,18 +39,17 @@ export const useFilters = () => {
     setPrice((prev) => ({ ...prev, [name]: value }));
   };
 
-  return React.useMemo(
-    () => ({
-      price,
-      setPrice,
-      updatePrice,
-      selectedIngredients,
-      toggleIngredients,
-      pizzaTypes,
-      togglePizzaTypes,
-      sizes,
-      toggleSize,
-    }),
-    [selectedIngredients, pizzaTypes, sizes, price]
-  );
+  console.log({ sizes, pizzaTypes, selectedIngredients });
+
+  return {
+    price,
+    setPrice,
+    updatePrice,
+    selectedIngredients,
+    toggleIngredients,
+    pizzaTypes,
+    togglePizzaTypes,
+    sizes,
+    toggleSize,
+  };
 };
