@@ -7,3 +7,4 @@ export { Skeleton } from "./skeleton";
 export { Select } from "./select";
 export { Popover } from "./popover";
 export { Slider } from "./slider";
+export { Textarea } from "./textarea";

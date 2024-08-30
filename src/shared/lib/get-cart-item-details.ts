@@ -4,12 +4,12 @@ import { Ingredient } from "@prisma/client";
 import { mapPizzaType } from "../constants/pizzas";
 
 export const getCartItemDetails = (
-  pizzaVariant: PizzaVariantType,
-  ingredients: Ingredient[]
+  pizzaVariant?: PizzaVariantType,
+  ingredients?: Ingredient[]
 ) => {
   const details = [];
 
-  if (pizzaVariant.size && pizzaVariant.type) {
+  if (pizzaVariant?.size && pizzaVariant.type) {
     const typeName = mapPizzaType[pizzaVariant.type];
     details.push(`${typeName} ${pizzaVariant.size} см`);
   }
