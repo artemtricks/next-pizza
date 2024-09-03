@@ -31,7 +31,7 @@ export const FormInput: React.FC<Props> = ({
   const errorText = errors[name]?.message as string;
 
   const onClickClear = () => {
-    setValue(name, "", { shouldValidate: true });
+    setValue(name, "", { shouldValidate: true }); // shouldValidate чтобы после очистки срабатывала валидация
   };
 
   return (
