@@ -15,10 +15,13 @@ import {
   checkoutFormSchema,
   CheckoutFormValues,
 } from "@/shared/constants/checkout-form-schema";
+import toast from "react-hot-toast";
+import { createOrder } from "@/app/actions";
 
 export default function CheckoutPage() {
   const { totalAmount, items, loading, removeCartItem, updateItemQuantity } =
     useCart();
+  const [submitting, setSubmitting] = React.useState(false);
 
   const form = useForm({
     resolver: zodResolver(checkoutFormSchema),
@@ -32,8 +35,19 @@ export default function CheckoutPage() {
     },
   });
 
-  const onSubmit = (data: CheckoutFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: CheckoutFormValues) => {
+    try {
+      setSubmitting(true);
+      const url = await createOrder(data);
+      toast.success("Заказ успешно оформлен! Переход на оплату...");
+
+      if (url!) {
+        location.href = url;
+      }
+    } catch (err) {
+      toast.error("Не удалось создать заказ");
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -60,7 +74,11 @@ export default function CheckoutPage() {
               />
             </div>
             <div className="w-[450px]">
-              <CheckoutSidebar totalAmount={totalAmount} loading={loading} />
+              <CheckoutSidebar
+                totalAmount={totalAmount}
+                loading={loading}
+                submitting={submitting}
+              />
             </div>
           </div>
         </form>
